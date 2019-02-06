@@ -13,6 +13,7 @@ public class Cat implements Task {
     public void setArgs(String[] args) throws CatException {
         if (args.length != 1)
             throw new CatException("Wrong number of args in cat");
+        arg = args[0];
     }
 
     public String execute() throws IOException {

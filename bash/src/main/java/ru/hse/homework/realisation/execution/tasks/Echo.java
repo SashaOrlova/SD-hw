@@ -29,7 +29,7 @@ public class Echo implements Task {
         return args;
     }
 
-    private static class EchoException extends Exception {
+    public static class EchoException extends Exception {
         EchoException(String message) {
             super(message);
         }

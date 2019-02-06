@@ -6,8 +6,11 @@ import ru.hse.homework.realisation.execution.tasks.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class WordsParser implements Parser {
+    private HashMap<String, String> variables = new HashMap<>();
+
     public Task[] getTasks(String[] words) throws Exception {
         if (words.length == 0)
             throw new ParserException("Wrong words number in parser");
@@ -34,7 +37,14 @@ public class WordsParser implements Parser {
                     task = new Exit();
                     break;
                 default:
-                    throw new Exception("Undefind command");
+                    if ("=".equals(words[0])) {
+                        variables.put(command, words[1]);
+                        words = Arrays.copyOfRange(words, Math.min(2, words.length), words.length);
+                        continue;
+                    } else {
+                        Runtime.getRuntime().exec(command);
+                        continue;
+                    }
             }
             task.setArgs(args);
             tasks.add(task);
@@ -47,6 +57,9 @@ public class WordsParser implements Parser {
     private String[] getWhileNotEnd(String[] words) {
         ArrayList<String> args = new ArrayList<>();
         for (String word: words) {
+            if (word.startsWith("$")) {
+                word = variables.get(word.substring(1));
+            }
             if ("|".equals(word)) {
                 String[] arrayArgs = new String[args.size()];
                 return args.toArray(arrayArgs);

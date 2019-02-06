@@ -12,7 +12,7 @@ import ru.hse.homework.realisation.analizers.WordsParser;
 
 import java.io.IOException;
 
-public class Executor {
+public class Executor implements ru.hse.homework.interfaces.execution.Executor {
     public static void main(String[] args) {
         Reader reader = new StreamReader(System.in);
         Lexer lexer = new SpaceLexer();
@@ -20,9 +20,9 @@ public class Executor {
         Writer writer = new StreamWriter(System.out);
         while (true) {
             String command = reader.getNextCommand();
-            String[] lexems = lexer.getToken(command);
             String[] taskResult = new String[1];
             try {
+                String[] lexems = lexer.getToken(command);
                 Task[] tasks = parser.getTasks(lexems);
                 for (Task task : tasks) {
                     if (taskResult[0] != null) {

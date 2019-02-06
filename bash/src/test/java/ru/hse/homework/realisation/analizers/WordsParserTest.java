@@ -48,4 +48,16 @@ public class WordsParserTest {
         Task pwdTask = new Pwd();
         assertArrayEquals(new Task[]{pwdTask, exitTask}, res);
     }
+
+    @org.junit.Test
+    public void assignmentParser() throws Exception {
+        WordsParser parser = new WordsParser();
+        String[] args1 = {"var", "=", "\"string\""};
+        String[] args2 = {"echo", "$var"};
+        parser.getTasks(args1);
+        Task[] res = parser.getTasks(args2);
+        Task echoTask = new Echo();
+        echoTask.setArgs(new String[]{"\"string\""});
+        assertArrayEquals(new Task[]{echoTask}, res);
+    }
 }

@@ -8,16 +8,16 @@ import static org.junit.Assert.*;
 public class SpaceLexerTest {
 
     @Test
-    public void smokeGetToken() {
+    public void smokeGetToken() throws Exception {
         Lexer lexer = new SpaceLexer();
         String[] res = lexer.getToken("wc test words | pwd | exit");
         assertArrayEquals(new String[]{"wc", "test", "words", "|", "pwd", "|", "exit"}, res);
     }
 
     @Test
-    public void quotesGetToken() {
+    public void quotesGetToken() throws Exception {
         Lexer lexer = new SpaceLexer();
         String[] res = lexer.getToken("echo \"what if elephants can fly?\" | wc");
-        assertArrayEquals(new String[]{"echo", "what", "if", "elephants", "can", "fly?", "|", "wc"}, res);
+        assertArrayEquals(new String[]{"echo", "what if elephants can fly?", "|", "wc"}, res);
     }
 }

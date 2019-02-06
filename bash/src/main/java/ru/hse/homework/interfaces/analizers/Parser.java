@@ -1,8 +1,16 @@
 package ru.hse.homework.interfaces.analizers;
 
 import ru.hse.homework.interfaces.execution.Task;
-import ru.hse.homework.realisation.analizers.WordsParser;
 
+/**
+ * Make tasks from tokens
+ */
 public interface Parser {
-    public Task[] getTasks(String[] words) throws Exception;
+    /**
+     *
+     * @param words tokens for analise
+     * @return tasks for execution
+     * @throws Exception
+     */
+    Task[] getTasks(String[] words) throws Exception;
 }
