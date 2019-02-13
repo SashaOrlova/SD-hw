@@ -1,15 +1,30 @@
 package ru.hse.homework.realisation.analizers;
 
+import org.apache.commons.cli.*;
 import ru.hse.homework.interfaces.execution.Task;
 import ru.hse.homework.interfaces.analizers.Parser;
 import ru.hse.homework.realisation.execution.tasks.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class WordsParser implements Parser {
-    private HashMap<String, String> variables = new HashMap<>();
+    Options options;
+    CommandLineParser parser = new DefaultParser();
+    CommandLine cmd;
+
+    public WordsParser() {
+        options = new Options();
+        Option i = new Option("i", "i", false, "");
+        i.setRequired(false);
+        options.addOption(i);
+        Option w = new Option("w", "w", false, "");
+        w.setRequired(false);
+        options.addOption(w);
+        Option A = new Option("A", "A", true, "");
+        i.setRequired(false);
+        options.addOption(A);
+    }
 
     public Task[] getTasks(String[] words) throws Exception {
         if (words.length == 0)
@@ -36,15 +51,15 @@ public class WordsParser implements Parser {
                 case Exit.COMMAND:
                     task = new Exit();
                     break;
-                default:
-                    if ("=".equals(words[0])) {
-                        variables.put(command, words[1]);
-                        words = Arrays.copyOfRange(words, Math.min(2, words.length), words.length);
-                        continue;
-                    } else {
-                        Runtime.getRuntime().exec(command);
-                        continue;
+                case Grep.COMMAND:
+                    task = new Grep();
+                    ArrayList<String> grep_args = new ArrayList<>();
+                    cmd = parser.parse(options, args);
+                    if (cmd.hasOption("i")) {
+                        grep_args.add("i");
                     }
+                default:
+                    throw new Exception("Undefind command");
             }
             task.setArgs(args);
             tasks.add(task);
@@ -57,9 +72,6 @@ public class WordsParser implements Parser {
     private String[] getWhileNotEnd(String[] words) {
         ArrayList<String> args = new ArrayList<>();
         for (String word: words) {
-            if (word.startsWith("$")) {
-                word = variables.get(word.substring(1));
-            }
             if ("|".equals(word)) {
                 String[] arrayArgs = new String[args.size()];
                 return args.toArray(arrayArgs);
