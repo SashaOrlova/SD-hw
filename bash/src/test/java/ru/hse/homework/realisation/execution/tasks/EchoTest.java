@@ -14,7 +14,7 @@ public class EchoTest {
     }
 
     @Test(expected = Echo.EchoException.class)
-    public void wringInputTest() throws Exception {
+    public void wrongInputTest() throws Exception {
         Task echoTask = new Echo();
         echoTask.setArgs(new String[0]);
         echoTask.execute();

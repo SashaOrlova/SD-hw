@@ -58,8 +58,18 @@ public class WordsParser implements Parser {
                     if (cmd.hasOption("i")) {
                         grep_args.add("i");
                     }
+                    if (cmd.hasOption("A")) {
+                        grep_args.add("A");
+                        grep_args.add(cmd.getOptionValue("A"));
+                    }
+                    if (cmd.hasOption("w")) {
+                        grep_args.add("w");
+                    }
+                    grep_args.add(args[args.length - 2]);
+                    grep_args.add(args[args.length - 1]);
+                    task.setArgs(grep_args.toArray(new String[0]));
                 default:
-                    throw new Exception("Undefind command");
+                    throw new Exception("Undefine command");
             }
             task.setArgs(args);
             tasks.add(task);
