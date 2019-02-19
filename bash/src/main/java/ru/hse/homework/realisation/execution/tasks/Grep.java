@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -20,7 +21,7 @@ public class Grep implements Task {
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute(Environment environment) throws Exception {
         String pattern = args[args.length - 2];
         String text = args[args.length - 1];
         if (Arrays.asList(args).contains("i")) {

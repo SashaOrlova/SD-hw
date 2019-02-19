@@ -5,6 +5,7 @@ import ru.hse.homework.interfaces.Writer;
 import ru.hse.homework.interfaces.analizers.Lexer;
 import ru.hse.homework.interfaces.analizers.Parser;
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 import ru.hse.homework.realisation.StreamReader;
 import ru.hse.homework.realisation.StreamWriter;
 import ru.hse.homework.realisation.analizers.SpaceLexer;
@@ -18,6 +19,7 @@ public class Executor implements ru.hse.homework.interfaces.execution.Executor {
         Lexer lexer = new SpaceLexer();
         Parser parser = new WordsParser();
         Writer writer = new StreamWriter(System.out);
+        Environment environment = new Environment();
         while (true) {
             String command = reader.getNextCommand();
             String[] taskResult = new String[1];
@@ -28,7 +30,7 @@ public class Executor implements ru.hse.homework.interfaces.execution.Executor {
                     if (taskResult[0] != null) {
                         task.setArgs(taskResult);
                     }
-                    taskResult[0] = task.execute();
+                    taskResult[0] = task.execute(environment);
                 }
                 writer.writeCommandResult(taskResult[0].getBytes());
             } catch (Exception e) {

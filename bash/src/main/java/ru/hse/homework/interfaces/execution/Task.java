@@ -1,5 +1,7 @@
 package ru.hse.homework.interfaces.execution;
 
+import ru.hse.homework.realisation.Environment;
+
 /**
  * Shell command
  */
@@ -14,6 +16,6 @@ public interface Task {
      * @return result of task
      * @throws Exception if smth wrong during task execution
      */
-    String execute() throws Exception;
+    String execute(Environment environment) throws Exception;
     String[] getArgs();
 }

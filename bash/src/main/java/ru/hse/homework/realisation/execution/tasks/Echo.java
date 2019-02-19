@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 
 import java.util.Arrays;
 
@@ -16,7 +17,7 @@ public class Echo implements Task {
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute(Environment environment) throws Exception {
         StringBuilder result = new StringBuilder();
         for (String arg: args) {
             result.append(arg);

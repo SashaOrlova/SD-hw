@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 
 import java.util.Arrays;
 
@@ -18,7 +19,7 @@ public class Wc implements Task {
     }
 
     @Override
-    public String execute() {
+    public String execute(Environment environment) {
         int linesNum = arg.split("[\n\r]").length;
         int wordsNum = arg.split(" ").length;
         int byteNum = arg.getBytes().length;

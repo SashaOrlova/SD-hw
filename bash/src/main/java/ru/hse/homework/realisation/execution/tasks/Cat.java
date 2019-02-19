@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Cat implements Task {
         arg = args[0];
     }
 
-    public String execute() throws IOException {
+    public String execute(Environment environment) throws IOException {
         char[] buf = new char[256];
         StringBuilder result = new StringBuilder();
         try (FileReader reader = new FileReader(arg)) {

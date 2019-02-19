@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 
 import java.io.File;
 
@@ -14,8 +15,8 @@ public class Pwd implements Task {
     }
 
     @Override
-    public String execute() throws Exception {
-        return new File("").getAbsoluteFile().getAbsolutePath();
+    public String execute(Environment environment) throws Exception {
+        return environment.getCurrentPath().toAbsolutePath().toString();
     }
 
     @Override
