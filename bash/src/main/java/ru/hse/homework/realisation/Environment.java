@@ -11,7 +11,7 @@ public class Environment {
     }
 
     public Path getCurrentPath() {
-        return currentPath;
+        return currentPath.normalize();
     }
 
     public void setCurrentPath(Path currentPath) {

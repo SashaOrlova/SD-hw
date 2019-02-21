@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 public class Ls implements Task {
     public static final String COMMAND = "ls";
-    private String[] args;
+    private String[] args = new String[0];
 
     @Override
     public void setArgs(String[] args) throws Exception {
@@ -25,7 +25,7 @@ public class Ls implements Task {
         DirectoryStream<Path> paths = Files.newDirectoryStream(path);
         StringBuilder stringBuilder = new StringBuilder();
         for (Path childPath : paths) {
-            stringBuilder.append(childPath.toString());
+            stringBuilder.append(childPath.getFileName().toString());
             stringBuilder.append('\n');
         }
         return stringBuilder.toString();
@@ -34,18 +34,18 @@ public class Ls implements Task {
     @Override
     public String execute(Environment environment) throws Exception {
         Path path;
-
         if (args.length == 0) {
             path = environment.getCurrentPath();
-        } else {
-            Path newPath = Paths.get(args[0]).resolve(environment.getCurrentPath());
+        } else if (args.length == 1) {
+            Path newPath = environment.getCurrentPath().resolve(args[0]);
             if (Files.exists(newPath)) {
                 path = newPath;
             } else {
                 return String.format("%s: %s: No such file or directory", COMMAND, args[0]);
             }
+        } else {
+            return "Internal error: unhandled number of arguments: " + args.length;
         }
-
         return lsFrom(path);
     }
 

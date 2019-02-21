@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 public class Cd implements Task {
     public static final String COMMAND = "cd";
-    private String[] args;
+    private String[] args = new String[0];
 
     @Override
     public void setArgs(String[] args) throws Exception {
@@ -19,16 +19,24 @@ public class Cd implements Task {
         this.args = args;
     }
 
+    /**
+     * Change directory in the environment to:
+     * <p>
+     * * home directory if no arguments provided
+     * * to the directory specified by the relative path provided in the first argument
+     *
+     * @return empty string on success, string containing error description on failure
+     */
     @Override
     public String execute(Environment environment) throws Exception {
-        if (args.length > 1) {
+        if (args.length == 0) {
             Path homePath = Paths.get(System.getProperty("user.home")).toAbsolutePath();
             environment.setCurrentPath(
                     homePath
             );
             return "";
         } else {
-            Path newPath = Paths.get(args[0]).resolve(environment.getCurrentPath());
+            Path newPath = environment.getCurrentPath().resolve(args[0]);
             if (Files.exists(newPath)) {
                 environment.setCurrentPath(newPath);
                 return "";
