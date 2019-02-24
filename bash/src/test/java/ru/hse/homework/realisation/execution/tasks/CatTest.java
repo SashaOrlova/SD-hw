@@ -21,7 +21,7 @@ public class CatTest {
         writer.close();
         Task catTask = new Cat();
         catTask.setArgs(new String[]{createdFile.getAbsolutePath()});
-        String res = catTask.execute();
+        String res = catTask.execute(null);
         assertEquals("Hello world!", res);
     }
 }

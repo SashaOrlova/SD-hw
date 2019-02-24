@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.Environment;
 
 public class Exit implements Task {
     public static final String COMMAND = "exit";
@@ -12,7 +13,7 @@ public class Exit implements Task {
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute(Environment environment) throws Exception {
         System.exit(0);
         return null;
     }

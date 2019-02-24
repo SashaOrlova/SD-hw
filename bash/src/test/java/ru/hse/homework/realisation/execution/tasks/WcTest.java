@@ -10,7 +10,7 @@ public class WcTest {
     public void simpleTest() throws Exception {
         Task wcTask = new Wc();
         wcTask.setArgs(new java.lang.String[]{"test test test\n line line line"});
-        String res = wcTask.execute();
+        String res = wcTask.execute(null);
         assertEquals("2 6 30", res);
     }
 }
