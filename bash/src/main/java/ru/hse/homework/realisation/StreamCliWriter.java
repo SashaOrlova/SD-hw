@@ -1,13 +1,13 @@
 package ru.hse.homework.realisation;
 
-import ru.hse.homework.interfaces.Writer;
+import ru.hse.homework.interfaces.CliWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class StreamWriter implements Writer {
+public class StreamCliWriter implements CliWriter {
     private OutputStream outputStream;
-    public StreamWriter(OutputStream output) {
+    public StreamCliWriter(OutputStream output) {
         outputStream = output;
     }
 

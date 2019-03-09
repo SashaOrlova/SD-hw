@@ -2,17 +2,20 @@ package ru.hse.homework.realisation.analizers;
 
 import ru.hse.homework.interfaces.analizers.Lexer;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Stack;
+
+import static java.lang.Math.max;
 
 public class SpaceLexer implements Lexer {
-    public String[] getToken(String line) throws spaceLexerException {
+    public String[] getTokens(String line) throws spaceLexerException {
         line = line.replaceAll("\"", " \" ");
         line = line.replaceAll("\'", " \' ");
+        line = line.replaceAll("=", " = ");
         line = line.replaceAll(" {2,}", " ");
         String[] lines = line.split(" ");
         ArrayList<String> resultLines = new ArrayList<>();
-        Stack<String> wordsStack = new Stack<>();
+        ArrayDeque<String> wordsStack = new ArrayDeque<>();
         int quotesBalance = 0;
         int doubleQuotesBalance = 0;
 
@@ -20,16 +23,17 @@ public class SpaceLexer implements Lexer {
             if ("\"".equals(word)) {
                 if (doubleQuotesBalance == 0) {
                     doubleQuotesBalance++;
-                    wordsStack.push(word);
+                    wordsStack.addLast(word);
                 } else {
                     StringBuilder bigWord = new StringBuilder();
-                    while (!wordsStack.peek().equals("\"") || !wordsStack.peek().equals("\"")) {
-                        bigWord.insert(0, wordsStack.pop() + " ");
+                    while (!wordsStack.getLast().equals("\"") || !wordsStack.getLast().equals("\"")) {
+                        bigWord.insert(0, wordsStack.removeLast() + " ");
                     }
-                    if (wordsStack.pop().equals("\'")) {
+                    if (wordsStack.getLast().equals("\'")) {
                         throw new spaceLexerException("Wrong quotes");
                     }
-                    bigWord.deleteCharAt(bigWord.length() - 1);
+                    wordsStack.removeLast();
+                    bigWord.deleteCharAt(max(bigWord.length() - 1, 0));
                     resultLines.add(bigWord.toString());
                     doubleQuotesBalance--;
                 }
@@ -38,13 +42,13 @@ public class SpaceLexer implements Lexer {
             if ("\'".equals(word)) {
                 if (quotesBalance == 0) {
                     quotesBalance++;
-                    wordsStack.push(word);
+                    wordsStack.addLast(word);
                 } else {
                     StringBuilder bigWord = new StringBuilder();
-                    while (!wordsStack.peek().equals("\"") || !wordsStack.peek().equals("\"")) {
+                    while (!wordsStack.getLast().equals("\"") || !wordsStack.getLast().equals("\"")) {
                         bigWord.insert(0, wordsStack.pop() + " ");
                     }
-                    if (wordsStack.pop().equals("\"")) {
+                    if (wordsStack.getLast().equals("\"")) {
                         throw new spaceLexerException("Wrong quotes");
                     }
                     bigWord.deleteCharAt(bigWord.length() - 1);
@@ -54,12 +58,12 @@ public class SpaceLexer implements Lexer {
                 continue;
             }
             if (quotesBalance == 1 || doubleQuotesBalance == 1) {
-                wordsStack.push(word);
+                wordsStack.add(word);
             } else {
                 resultLines.add(word);
             }
         }
-        if (!wordsStack.empty()) {
+        if (!wordsStack.isEmpty()) {
             throw new spaceLexerException("Wrong number of quotes");
         }
 

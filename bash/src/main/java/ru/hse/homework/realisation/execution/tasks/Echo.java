@@ -9,17 +9,15 @@ public class Echo implements Task {
     private String[] args;
 
     @Override
-    public void setArgs(String[] args) throws Exception {
-        if (args.length == 0)
-            throw new EchoException("Wrong number of args in echo");
+    public void setArgs(String[] args) {
         this.args = args;
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute() {
         StringBuilder result = new StringBuilder();
         for (String arg: args) {
-            result.append(arg);
+            result.append(arg).append(' ');
         }
         return result.toString();
     }

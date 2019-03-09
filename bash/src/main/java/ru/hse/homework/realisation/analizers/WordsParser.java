@@ -1,16 +1,15 @@
 package ru.hse.homework.realisation.analizers;
 
+import org.apache.commons.lang3.ArrayUtils;
 import ru.hse.homework.interfaces.execution.Task;
 import ru.hse.homework.interfaces.analizers.Parser;
+import ru.hse.homework.realisation.execution.Executor;
 import ru.hse.homework.realisation.execution.tasks.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class WordsParser implements Parser {
-    private HashMap<String, String> variables = new HashMap<>();
-
     public Task[] getTasks(String[] words) throws Exception {
         if (words.length == 0)
             throw new ParserException("Wrong words number in parser");
@@ -37,12 +36,17 @@ public class WordsParser implements Parser {
                     task = new Exit();
                     break;
                 default:
-                    if ("=".equals(words[0])) {
-                        variables.put(command, words[1]);
+                    if (words.length > 0 && "=".equals(words[0])) {
+                        task = new Assignment();
+                        task.setArgs(new String[]{command, words[1]});
+                        tasks.add(task);
                         words = Arrays.copyOfRange(words, Math.min(2, words.length), words.length);
                         continue;
                     } else {
-                        Runtime.getRuntime().exec(command);
+                        task = new ExternalTask();
+                        task.setArgs(ArrayUtils.addAll(new String[]{command}, args));
+                        tasks.add(task);
+                        words = Arrays.copyOfRange(words, Math.min(args.length, words.length), words.length);
                         continue;
                     }
             }
@@ -58,7 +62,7 @@ public class WordsParser implements Parser {
         ArrayList<String> args = new ArrayList<>();
         for (String word: words) {
             if (word.startsWith("$")) {
-                word = variables.get(word.substring(1));
+                word = Executor.getFromContext(word.substring(1));
             }
             if ("|".equals(word)) {
                 String[] arrayArgs = new String[args.size()];

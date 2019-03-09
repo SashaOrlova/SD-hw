@@ -54,8 +54,9 @@ public class WordsParserTest {
         WordsParser parser = new WordsParser();
         String[] args1 = {"var", "=", "\"string\""};
         String[] args2 = {"echo", "$var"};
-        parser.getTasks(args1);
-        Task[] res = parser.getTasks(args2);
+        Task[] res = parser.getTasks(args1);
+        res[0].execute();
+        res = parser.getTasks(args2);
         Task echoTask = new Echo();
         echoTask.setArgs(new String[]{"\"string\""});
         assertArrayEquals(new Task[]{echoTask}, res);

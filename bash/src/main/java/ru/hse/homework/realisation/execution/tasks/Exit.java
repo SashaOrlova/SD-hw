@@ -12,7 +12,7 @@ public class Exit implements Task {
     }
 
     @Override
-    public String execute() throws Exception {
+    public String execute() {
         System.exit(0);
         return null;
     }
@@ -22,7 +22,7 @@ public class Exit implements Task {
         return null;
     }
 
-    private static class ExitException extends Exception {
+    public static class ExitException extends Exception {
         ExitException(String message) {
             super(message);
         }

@@ -6,19 +6,18 @@ import java.util.Arrays;
 
 public class Wc implements Task {
     public static final String COMMAND = "wc";
-    private static String arg;
+    private static String[] args;
 
     @Override
     public void setArgs(String[] args) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String arg: args ) {
-            stringBuilder.append(arg);
-        }
-        arg = stringBuilder.toString();
+        Wc.args = args;
     }
 
     @Override
-    public String execute() {
+    public String execute() throws Exception {
+        Task cat = new Cat();
+        cat.setArgs(args);
+        String arg = cat.execute();
         int linesNum = arg.split("[\n\r]").length;
         int wordsNum = arg.split(" ").length;
         int byteNum = arg.getBytes().length;
@@ -27,7 +26,7 @@ public class Wc implements Task {
 
     @Override
     public String[] getArgs() {
-        return new String[]{arg};
+        return args;
     }
 
 
@@ -36,13 +35,6 @@ public class Wc implements Task {
         if (obj.getClass() != this.getClass()) {
             return false;
         }
-        return Arrays.equals(new String[]{arg}, ((Task) obj).getArgs());
-    }
-
-
-    private static class WCException extends Exception {
-        WCException(String message) {
-            super(message);
-        }
+        return Arrays.equals(args, ((Task) obj).getArgs());
     }
 }
