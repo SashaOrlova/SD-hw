@@ -11,12 +11,20 @@ public class Exit implements Task {
             throw new ExitException("Wrong number of args in exit");
     }
 
+    /**
+     * @param args входной поток
+     * @return результат выполнения
+     * @throws Exception
+     */
     @Override
-    public String execute() {
+    public String execute(String[] args) {
         System.exit(0);
         return null;
     }
 
+    /**
+     * @return аргументы команды
+     */
     @Override
     public String[] getArgs() {
         return null;

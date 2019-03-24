@@ -9,7 +9,7 @@ public class EchoTest {
     public void simpleTest() throws Exception {
         Task echoTask = new Echo();
         echoTask.setArgs(new String[]{"hello", "world", "!"});
-        String res = echoTask.execute();
+        String res = echoTask.execute(null);
         assertEquals("hello world ! ", res);
     }
 }

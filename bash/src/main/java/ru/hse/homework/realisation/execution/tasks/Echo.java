@@ -6,22 +6,36 @@ import java.util.Arrays;
 
 public class Echo implements Task {
     public static final String COMMAND = "echo";
-    private String[] args;
+    private String[] args = null;
 
     @Override
     public void setArgs(String[] args) {
         this.args = args;
     }
 
+    /**
+     * @param args входной поток
+     * @return результат выполнения
+     * @throws Exception
+     */
     @Override
-    public String execute() {
+    public String execute(String[] args) throws EchoException {
+        if (args != null) {
+            this.args = args;
+        }
         StringBuilder result = new StringBuilder();
-        for (String arg: args) {
+        for (String arg: this.args) {
+            if (arg.startsWith("\"") || arg.startsWith("'")) {
+                arg = arg.substring(1, arg.length() - 1);
+            }
             result.append(arg).append(' ');
         }
         return result.toString();
     }
 
+    /**
+     * @return аргументы команды
+     */
     @Override
     public String[] getArgs() {
         return args;

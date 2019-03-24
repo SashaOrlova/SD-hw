@@ -12,39 +12,54 @@ import ru.hse.homework.realisation.analizers.WordsParser;
 import ru.hse.homework.realisation.execution.tasks.Exit;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Класс, выполняющий задачи
+ */
 public class Executor {
     private static HashMap<String, String> variables = new HashMap<>();
 
+    /**
+     * Помещает значение переменной в scope
+     * @param symb название переменной
+     * @param value значение переменной
+     */
     public static void addToContext(String symb, String value) {
         variables.put(symb, value);
     }
 
-    public static String getFromContext(String symb) {
-        return variables.get(symb);
+    /**
+     * @return имеющийся контекст
+     */
+    public static HashMap<String, String> getVariables() {
+        return variables;
     }
-
+    /** Главная функция
+     * @param args
+     */
     public static void main(String[] args) {
-        CliReader cliReader = new StreamCliReader(System.in);
+        StreamCliReader cliReader = new StreamCliReader(System.in);
         Lexer lexer = new SpaceLexer();
         Parser parser = new WordsParser();
         CliWriter cliWriter = new StreamCliWriter(System.out);
         while (true) {
             String command = cliReader.getNextCommand();
-            String[] taskResult = new String[1];
             try {
                 String[] lexems = lexer.getTokens(command);
-                Task[] tasks = parser.getTasks(lexems);
-                for (Task task : tasks) {
-                    if (taskResult[0] != null) {
-                        task.setArgs(taskResult);
-                    }
-                    taskResult[0] = task.execute();
+                String[] result = null;
+                while (lexems.length > 0) {
+                    Task task = parser.getOneTask(lexems);
+                    result = new String[]{task.execute(result)};
+                    lexems = Arrays.copyOfRange(
+                            lexems, Math.min(task.getArgs().length + 2, lexems.length), lexems.length
+                    );
                 }
-                cliWriter.writeCommandResult(taskResult[0].getBytes());
+                cliWriter.writeCommandResult(
+                        ((result == null || result[0] == null ? "" : result[0]) + '\n').getBytes());
             } catch (Exit.ExitException e) {
-                ((StreamCliReader) cliReader).closeScanner();
+                cliReader.closeScanner();
                 System.exit(0);
             }
             catch (Exception e) {

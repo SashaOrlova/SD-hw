@@ -1,36 +1,45 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.CliUtils;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Cat implements Task {
     public static final String COMMAND = "cat";
     private String arg;
 
     public void setArgs(String[] args) throws CatException {
-        if (args.length > 0)
+        if (args.length > 0) {
             arg = args[0];
-    }
-
-    public String execute() throws IOException {
-        char[] buf = new char[256];
-        StringBuilder result = new StringBuilder();
-        try (FileReader reader = new FileReader(arg)) {
-            int c = reader.read(buf);
-            while(c > 0){
-                if(c < 256){
-                    buf = Arrays.copyOf(buf, c);
-                }
-                result.append(buf);
-                c = reader.read(buf);
-            }
         }
-        return result.toString();
+        if (args.length > 1) {
+            throw new CatException("Wrong args number");
+        }
     }
 
+    /**
+     * @param args входной поток
+     * @return результат выполнения
+     * @throws Exception
+     */
+    public String execute(String[] args) throws IOException, CatException {
+        if (this.arg != null) {
+            return CliUtils.getFile(arg);
+        } else if (args != null && args.length > 0) {
+            StringBuilder result = new StringBuilder();
+            for (String words: args) {
+                result.append(words).append(' ');
+            }
+            return result.toString();
+        } else {
+            throw new CatException("Wrong input argument");
+        }
+    }
+
+    /**
+     * @return аргументы команды
+     */
     @Override
     public String[] getArgs() {
         return new String[]{arg};

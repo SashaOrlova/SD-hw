@@ -23,7 +23,7 @@ public class WcTest {
         writer.close();
         Task wcTask = new Wc();
         wcTask.setArgs(new java.lang.String[]{createdFile.getAbsolutePath()});
-        String res = wcTask.execute();
+        String res = wcTask.execute(null);
         assertEquals("2 6 30", res);
     }
 }

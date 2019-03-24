@@ -13,19 +13,38 @@ public class ExternalTask implements Task {
         command = args;
     }
 
+    /**
+     * @param args входной поток
+     * @return результат выполнения
+     * @throws Exception
+     */
     @Override
-    public String execute() throws Exception {
+    public String execute(String[] args) throws Exception {
         Process p = Runtime.getRuntime().exec(String.join(" ", command));
         p.waitFor();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        StringBuilder output = new StringBuilder();
-        while ((line = reader.readLine())!= null) {
-            output.append(line).append("\n");
+        if (p.exitValue() == 0) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            StringBuilder output = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+            return output.toString();
+        } else {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String line;
+            StringBuilder output = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+            return output.toString();
         }
-        return output.toString();
     }
 
+
+    /**
+     * @return аргументы команды
+     */
     @Override
     public String[] getArgs() {
         return command;

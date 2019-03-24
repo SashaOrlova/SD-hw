@@ -13,11 +13,19 @@ public class Pwd implements Task {
             throw new PwdException("Wrong number of args in pwd");
     }
 
+    /**
+     * @param args входной поток
+     * @return результат выполнения
+     * @throws Exception
+     */
     @Override
-    public String execute() throws Exception {
+    public String execute(String[] args) throws Exception {
         return new File("").getAbsoluteFile().getAbsolutePath();
     }
 
+    /**
+     * @return аргументы команды
+     */
     @Override
     public String[] getArgs() {
         return null;
