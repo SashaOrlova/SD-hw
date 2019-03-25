@@ -29,18 +29,17 @@ public class Wc implements Task {
     public String execute(String[] args) throws Exception {
         String arg;
         if (args != null) {
-            StringBuilder argBuilder = new StringBuilder();
-            for (String word: args) {
-                argBuilder.append(word).append(' ');
-            }
-            arg = argBuilder.toString();
+            arg = String.join(" ", args);
         } else {
             arg = CliUtils.getFile(this.args[0]);
         }
-        int linesNum = arg.replaceAll("[\n\r]{2,}", " ").split("[\n\r]").length;
-        int wordsNum = arg.replaceAll(" {2,}", " ").split(" ").length;
+        int linesNum = arg.replaceAll(System.lineSeparator() + "{2,}", " ").split("[\n\r]").length;
+        long wordsNum = Arrays.stream(
+                arg.split("\\s"))
+                .filter(x -> !"".equals(x))
+                .count();
         int byteNum = arg.getBytes().length;
-        return Integer.toString(linesNum) + ' ' + Integer.toString(wordsNum) + ' ' + Integer.toString(byteNum);
+        return linesNum + "\t" + wordsNum + "\t" + byteNum;
     }
 
     /**

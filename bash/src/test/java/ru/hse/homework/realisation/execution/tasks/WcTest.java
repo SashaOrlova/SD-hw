@@ -24,6 +24,6 @@ public class WcTest {
         Task wcTask = new Wc();
         wcTask.setArgs(new java.lang.String[]{createdFile.getAbsolutePath()});
         String res = wcTask.execute(null);
-        assertEquals("2 6 30", res);
+        assertEquals("2\t6\t30", res);
     }
 }

@@ -20,12 +20,19 @@ public class SpaceLexer implements Lexer {
      */
     @Override
     public String[] getTokens(String input) throws spaceLexerException {
-        input = CliUtils.changeVars(input);
-
         ArrayList<String> splitByQuotes = splitByQuotes(input);
 
-        ArrayList<String> splitByPipe = new ArrayList<>();
+        ArrayList<String> withChangesVars = new ArrayList<>();
         for (String word: splitByQuotes) {
+            if (!word.startsWith("'")) {
+                withChangesVars.add(CliUtils.changeVars(word));
+            } else {
+                withChangesVars.add(word);
+            }
+        }
+
+        ArrayList<String> splitByPipe = new ArrayList<>();
+        for (String word: withChangesVars) {
             splitByPipe.addAll(splitByPipe(word));
         }
 
@@ -39,17 +46,8 @@ public class SpaceLexer implements Lexer {
             splitByEquals.addAll(splitByEquals(word));
         }
 
-        return clearOutput(splitByEquals).toArray(new String[0]);
-    }
-
-    private List<String> clearOutput(ArrayList<String> input) {
-        ArrayList<String> res = new ArrayList<>();
-        for (String word: input) {
-            if (!word.equals("")) {
-                res.add(word);
-            }
-        }
-        return res;
+        splitByEquals.removeIf(""::equals);
+        return splitByEquals.toArray(new String[0]);
     }
 
     /**
@@ -107,45 +105,33 @@ public class SpaceLexer implements Lexer {
      */
     public ArrayList<String> splitByQuotes(String input) throws spaceLexerException {
         ArrayList<String> words = new ArrayList<>();
-        ArrayDeque<Character> deque = new ArrayDeque<>();
-        int position = 0;
+        StringBuilder stringBuilder = new StringBuilder();
         char quotes = ' ';
-        do {
-            if (input.charAt(position) == quotes && (input.charAt(position) == '"' || input.charAt(position) == '\'')) {
-                deque.add(quotes);
-                words.add(getStringFromDeque(deque));
-                deque.clear();
+        for (char c : input.toCharArray()) {
+            if (c == quotes && (c == '"' || c == '\'')) {
+                stringBuilder.append(quotes);
+                words.add(stringBuilder.toString());
+                stringBuilder = new StringBuilder();
                 quotes = ' ';
-                position++;
-            } else if (' ' == quotes && (input.charAt(position) == '"' || input.charAt(position) == '\'')) {
-                words.add(getStringFromDeque(deque));
-                deque.clear();
-                quotes = input.charAt(position);
-                deque.add(quotes);
-                position++;
+            } else if (' ' == quotes && (c == '"' || c == '\'')) {
+                words.add(stringBuilder.toString());
+                stringBuilder = new StringBuilder();
+                quotes = c;
+                stringBuilder.append(quotes);
             } else {
-                deque.add(input.charAt(position));
-                position++;
+                stringBuilder.append(c);
             }
-        } while (position != input.length());
+        }
 
         if (quotes != ' ') {
             throw new spaceLexerException("Wrong quotes");
         }
 
-        if (!deque.isEmpty()) {
-            words.add(getStringFromDeque(deque));
+        if (stringBuilder.length() != 0) {
+            words.add(stringBuilder.toString());
         }
 
         return words;
-    }
-
-    private String getStringFromDeque(ArrayDeque<Character> deque) {
-        StringBuilder answer = new StringBuilder();
-        for (Character symbol: deque) {
-            answer.append(symbol);
-        }
-        return answer.toString();
     }
 
     private class spaceLexerException extends Exception {

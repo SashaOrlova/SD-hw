@@ -12,13 +12,15 @@ import ru.hse.homework.realisation.analizers.WordsParser;
 import ru.hse.homework.realisation.execution.tasks.Exit;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Класс, выполняющий задачи
  */
 public class Executor {
+    private static CliWriter cliWriter = new StreamCliWriter(System.out);
+
     private static HashMap<String, String> variables = new HashMap<>();
 
     /**
@@ -31,10 +33,13 @@ public class Executor {
     }
 
     /**
-     * @return имеющийся контекст
+     * @return имеющийся контекст, переменные отсортированы в порядке возрастания длинны
      */
     public static HashMap<String, String> getVariables() {
-        return variables;
+        return variables.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(Comparator.comparingInt(String::length).reversed()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
     /** Главная функция
      * @param args
@@ -43,7 +48,6 @@ public class Executor {
         StreamCliReader cliReader = new StreamCliReader(System.in);
         Lexer lexer = new SpaceLexer();
         Parser parser = new WordsParser();
-        CliWriter cliWriter = new StreamCliWriter(System.out);
         while (true) {
             String command = cliReader.getNextCommand();
             try {
@@ -57,10 +61,10 @@ public class Executor {
                     );
                 }
                 cliWriter.writeCommandResult(
-                        ((result == null || result[0] == null ? "" : result[0]) + '\n').getBytes());
+                        ((result == null || result[0] == null ? "" : result[0]) + System.lineSeparator()).getBytes());
             } catch (Exit.ExitException e) {
                 cliReader.closeScanner();
-                System.exit(0);
+                return;
             }
             catch (Exception e) {
                 try {
@@ -69,6 +73,14 @@ public class Executor {
                     System.out.println(e1.getMessage());
                 }
             }
+        }
+    }
+
+    public static void printToErrorStream(String output) {
+        try {
+            cliWriter.writeCommandResult((output).getBytes());
+        } catch (IOException e) {
+            System.out.println(output);
         }
     }
 }

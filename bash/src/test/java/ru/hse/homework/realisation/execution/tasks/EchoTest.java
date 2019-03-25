@@ -10,6 +10,6 @@ public class EchoTest {
         Task echoTask = new Echo();
         echoTask.setArgs(new String[]{"hello", "world", "!"});
         String res = echoTask.execute(null);
-        assertEquals("hello world ! ", res);
+        assertEquals("hello world !", res);
     }
 }

@@ -63,7 +63,7 @@ public class WordsParserTest {
         res.execute(null);
         res = parser.getOneTask(args2);
         Task echoTask = new Echo();
-        echoTask.setArgs(new String[]{"\"string\""});
+        echoTask.setArgs(new String[]{"string"});
         assertEquals(echoTask, res);
     }
 

@@ -1,6 +1,7 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.execution.Executor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -37,7 +38,8 @@ public class ExternalTask implements Task {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-            return output.toString();
+            Executor.printToErrorStream(output.toString());
+            return "";
         }
     }
 

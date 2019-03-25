@@ -27,11 +27,7 @@ public class Cat implements Task {
         if (this.arg != null) {
             return CliUtils.getFile(arg);
         } else if (args != null && args.length > 0) {
-            StringBuilder result = new StringBuilder();
-            for (String words: args) {
-                result.append(words).append(' ');
-            }
-            return result.toString();
+            return  String.join(" ", args);
         } else {
             throw new CatException("Wrong input argument");
         }

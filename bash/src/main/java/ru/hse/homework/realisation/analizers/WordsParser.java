@@ -1,16 +1,12 @@
 package ru.hse.homework.realisation.analizers;
 
-import org.apache.commons.lang3.ArrayUtils;
 import ru.hse.homework.interfaces.execution.Task;
 import ru.hse.homework.interfaces.analizers.Parser;
 import ru.hse.homework.realisation.CliUtils;
-import ru.hse.homework.realisation.execution.Executor;
 import ru.hse.homework.realisation.execution.tasks.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Парсит набор токенов, превращая его в исполняемые задачки
@@ -49,9 +45,10 @@ public class WordsParser implements Parser {
                     return task;
                 } else {
                     task = new ExternalTask();
-                    task.setArgs(ArrayUtils.addAll(
-                            new String[]{command},
-                            Arrays.copyOfRange(taskWithArgs, Math.min(1, taskWithArgs.length), taskWithArgs.length)
+
+                    task.setArgs(concatArray(
+                            Arrays.copyOfRange(taskWithArgs, Math.min(1, taskWithArgs.length), taskWithArgs.length),
+                            command
                         ));
                     return task;
                 }
@@ -63,7 +60,12 @@ public class WordsParser implements Parser {
     private String[] getWhileNotEnd(String[] words) {
         ArrayList<String> args = new ArrayList<>();
         for (String word: words) {
-            word = CliUtils.changeVars(word);
+            if (!word.startsWith("'")) {
+                word = CliUtils.changeVars(word);
+            }
+            if (word.startsWith("\"") || word.startsWith("'")) {
+                word = word.substring(1, word.length() - 1);
+            }
             if ("|".equals(word)) {
                 String[] arrayArgs = new String[args.size()];
                 return args.toArray(arrayArgs);
@@ -73,5 +75,12 @@ public class WordsParser implements Parser {
         }
         String[] arrayArgs = new String[args.size()];
         return args.toArray(arrayArgs);
+    }
+
+    private String[] concatArray(String[] array, String string) {
+        String[] newArray = new String[array.length + 1];
+        newArray[0] = string;
+        System.arraycopy(array, 0, newArray, 1, array.length);
+        return newArray;
     }
 }
