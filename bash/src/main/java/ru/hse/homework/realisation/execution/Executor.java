@@ -75,12 +75,4 @@ public class Executor {
             }
         }
     }
-
-    public static void printToErrorStream(String output) {
-        try {
-            cliWriter.writeCommandResult((output).getBytes());
-        } catch (IOException e) {
-            System.out.println(output);
-        }
-    }
 }

@@ -38,8 +38,7 @@ public class ExternalTask implements Task {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-            Executor.printToErrorStream(output.toString());
-            return "";
+            throw new ExternalException(output.toString());
         }
     }
 
@@ -50,5 +49,11 @@ public class ExternalTask implements Task {
     @Override
     public String[] getArgs() {
         return command;
+    }
+
+    private static class ExternalException extends Exception {
+        ExternalException(String message) {
+            super(message);
+        }
     }
 }

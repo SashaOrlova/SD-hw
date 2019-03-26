@@ -3,6 +3,9 @@ package ru.hse.homework.realisation.execution.tasks;
 import ru.hse.homework.interfaces.execution.Task;
 import ru.hse.homework.realisation.CliUtils;
 
+import java.io.BufferedReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Arrays;
 
 public class Wc implements Task {
@@ -33,7 +36,11 @@ public class Wc implements Task {
         } else {
             arg = CliUtils.getFile(this.args[0]);
         }
-        int linesNum = arg.replaceAll(System.lineSeparator() + "{2,}", " ").split("[\n\r]").length;
+        BufferedReader reader = new BufferedReader(new StringReader(arg));
+        int linesNum = 0;
+        while (reader.readLine() != null) {
+            linesNum++;
+        }
         long wordsNum = Arrays.stream(
                 arg.split("\\s"))
                 .filter(x -> !"".equals(x))
