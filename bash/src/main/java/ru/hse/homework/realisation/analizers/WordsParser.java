@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class WordsParser implements Parser {
 
     /**
+     * Получение одной задачи
      * @param tokens набор токенов, полученный из лексера
      * @return первую найденную задачу для выполнения
      * @throws Exception если при составлении задачи обнаружена ошибка

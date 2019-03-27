@@ -7,7 +7,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * Вспомогательные функции
+ */
 public class CliUtils {
+    /**
+     * Получение содержимого файла
+     * @param filename название файла
+     * @return содержимое файла
+     * @throws IOException ошибка при работе с файлом
+     */
     public static String getFile(String filename) throws IOException {
         {
             char[] buf = new char[256];
@@ -26,6 +35,11 @@ public class CliUtils {
         }
     }
 
+    /**
+     * Заменяет вхождения переменных на значение
+     * @param word строка, где заменять
+     * @return результат замены
+     */
     public static String changeVars(String word) {
         for (Map.Entry<String, String> pair : Executor.getVariables().entrySet()) {
             word = word.replaceAll("\\$" + pair.getKey(), pair.getValue());

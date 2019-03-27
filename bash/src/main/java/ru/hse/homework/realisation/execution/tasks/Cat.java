@@ -5,10 +5,18 @@ import ru.hse.homework.realisation.CliUtils;
 
 import java.io.IOException;
 
+/**
+ * Вывод содержимого файла
+ */
 public class Cat implements Task {
     public static final String COMMAND = "cat";
     private String arg;
 
+    /**
+     * Устанавливает аргументы команды
+     * @param args arguments for command
+     * @throws CatException аргументов больше одного
+     */
     public void setArgs(String[] args) throws CatException {
         if (args.length > 0) {
             arg = args[0];
@@ -19,6 +27,7 @@ public class Cat implements Task {
     }
 
     /**
+     * Выполняет задачу
      * @param args входной поток
      * @return результат выполнения
      * @throws Exception
@@ -34,6 +43,7 @@ public class Cat implements Task {
     }
 
     /**
+     * Возвращает аргументы команды
      * @return аргументы команды
      */
     @Override

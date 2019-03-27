@@ -4,16 +4,24 @@ import ru.hse.homework.interfaces.execution.Task;
 
 import java.util.Arrays;
 
+/**
+ * Вывод входных аргументов
+ */
 public class Echo implements Task {
     public static final String COMMAND = "echo";
     private String[] args = null;
 
+    /**
+     * Устанавливает аргументы команды
+     * @param args arguments for command
+     */
     @Override
     public void setArgs(String[] args) {
         this.args = args;
     }
 
     /**
+     * Выполняет задачу
      * @param args входной поток
      * @return результат выполнения
      * @throws Exception
@@ -27,6 +35,7 @@ public class Echo implements Task {
     }
 
     /**
+     * Возвращает аргументы команды
      * @return аргументы команды
      */
     @Override

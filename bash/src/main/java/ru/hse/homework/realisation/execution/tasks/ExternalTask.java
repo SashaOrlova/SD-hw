@@ -1,20 +1,27 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
-import ru.hse.homework.realisation.execution.Executor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/**
+ * Задача, выполняемая в bash
+ */
 public class ExternalTask implements Task {
     private String[] command;
 
+    /**
+     * Устанавливает аргументы команды
+     * @param args arguments for command
+     */
     @Override
     public void setArgs(String[] args) {
         command = args;
     }
 
     /**
+     * Выполняет задачу
      * @param args входной поток
      * @return результат выполнения
      * @throws Exception
@@ -44,6 +51,7 @@ public class ExternalTask implements Task {
 
 
     /**
+     * Возвращает аргументы команды
      * @return аргументы команды
      */
     @Override

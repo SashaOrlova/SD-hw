@@ -2,14 +2,22 @@ package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
 
+/**
+ * Выход из программы
+ */
 public class Exit implements Task {
     public static final String COMMAND = "exit";
 
+    /**
+     * Устанавливает аргументы команды, они игнорируются
+     * @param args arguments for command
+     */
     @Override
     public void setArgs(String[] args) {
     }
 
     /**
+     * Выполняет задачу
      * @param args входной поток
      * @return результат выполнения
      * @throws Exception
@@ -20,11 +28,12 @@ public class Exit implements Task {
     }
 
     /**
+     * Возвращает аргументы команды
      * @return аргументы команды
      */
     @Override
     public String[] getArgs() {
-        return null;
+        return new String[0];
     }
 
     public static class ExitException extends Exception {

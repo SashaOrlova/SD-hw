@@ -3,12 +3,15 @@ package ru.hse.homework.realisation.execution.tasks;
 import ru.hse.homework.interfaces.execution.Task;
 import ru.hse.homework.realisation.execution.Executor;
 
+/**
+ * Присваивание значения переменной
+ */
 public class Assignment implements Task {
     private String[] args;
 
     /**
+     * Устанавливает аргументы команды
      * @param args arguments for command
-     * @throws Exception
      */
     @Override
     public void setArgs(String[] args) throws Exception {
@@ -16,6 +19,7 @@ public class Assignment implements Task {
     }
 
     /**
+     * Выполняет задачу
      * @param args входной поток
      * @return результат выполнения
      * @throws Exception
@@ -33,6 +37,7 @@ public class Assignment implements Task {
     }
 
     /**
+     * Возвращает аргументы команды
      * @return аргументы команды
      */
     @Override

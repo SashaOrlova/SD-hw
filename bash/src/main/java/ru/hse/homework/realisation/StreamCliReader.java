@@ -12,6 +12,7 @@ public class StreamCliReader implements CliReader {
     private Scanner scanner;
 
     /**
+     * Создание класса для чтения потока
      * @param input входной поток для чтения
      */
     public StreamCliReader(InputStream input) {
@@ -19,6 +20,7 @@ public class StreamCliReader implements CliReader {
     }
 
     /**
+     * Получить следующую введенную строку
      * @return Возвращает прочитанную со входа строчку
      */
     public String getNextCommand() {

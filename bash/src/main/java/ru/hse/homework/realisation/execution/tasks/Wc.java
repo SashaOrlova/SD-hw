@@ -8,11 +8,15 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 
+/**
+ * Подсчет количества строк, слов и байт в файле
+ */
 public class Wc implements Task {
     public static final String COMMAND = "wc";
     private String[] args;
 
     /**
+     * Устанавливает аргументы команды
      * @param args arguments for command
      */
     @Override
@@ -24,6 +28,7 @@ public class Wc implements Task {
     }
 
     /**
+     * Выполняет задачу
      * @param args входной поток
      * @return результат выполнения
      * @throws Exception
@@ -50,6 +55,7 @@ public class Wc implements Task {
     }
 
     /**
+     * Возвращает аргументы команды
      * @return аргументы команды
      */
     @Override
