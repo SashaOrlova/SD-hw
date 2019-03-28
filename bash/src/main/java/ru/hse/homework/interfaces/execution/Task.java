@@ -14,6 +14,6 @@ public interface Task {
      * @return result of task
      * @throws Exception if smth wrong during task execution
      */
-    String execute() throws Exception;
+    String execute(String[] input) throws Exception;
     String[] getArgs();
 }

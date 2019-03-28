@@ -10,5 +10,5 @@ public interface Lexer {
      * @return tokens
      * @throws Exception
      */
-    String[] getToken(String line) throws Exception;
+    String[] getTokens(String line) throws Exception;
 }

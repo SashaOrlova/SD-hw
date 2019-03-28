@@ -1,22 +1,20 @@
 package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
-
-import java.util.Arrays;
+import ru.hse.homework.realisation.execution.Executor;
 
 /**
- * Вывод входных аргументов
+ * Присваивание значения переменной
  */
-public class Echo implements Task {
-    public static final String COMMAND = "echo";
-    private String[] args = null;
+public class Assignment implements Task {
+    private String[] args;
 
     /**
      * Устанавливает аргументы команды
      * @param args arguments for command
      */
     @Override
-    public void setArgs(String[] args) {
+    public void setArgs(String[] args) throws Exception {
         this.args = args;
     }
 
@@ -27,11 +25,15 @@ public class Echo implements Task {
      * @throws Exception
      */
     @Override
-    public String execute(String[] args) throws EchoException {
-        if (args != null) {
+    public String execute(String[] args) throws Exception {
+        if (this.args == null) {
             this.args = args;
         }
-        return String.join(" ", this.args);
+        if (this.args == null) {
+            throw new AssignmentException("Undefine assignment value");
+        }
+        Executor.addToContext(this.args[0], this.args[1]);
+        return null;
     }
 
     /**
@@ -43,17 +45,9 @@ public class Echo implements Task {
         return args;
     }
 
-    public static class EchoException extends Exception {
-        EchoException(String message) {
+    public static class AssignmentException extends Exception {
+        AssignmentException(String message) {
             super(message);
         }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj.getClass() != this.getClass()) {
-            return false;
-        }
-        return Arrays.equals(args, ((Task) obj).getArgs());
     }
 }

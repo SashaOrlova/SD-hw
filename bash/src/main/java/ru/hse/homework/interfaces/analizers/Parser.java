@@ -10,7 +10,7 @@ public interface Parser {
      *
      * @param words tokens for analise
      * @return tasks for execution
-     * @throws Exception
+     * @throws Exception if smth wrong
      */
-    Task[] getTasks(String[] words) throws Exception;
+    Task getOneTask(String[] words) throws Exception;
 }

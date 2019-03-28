@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * Write result in output
  */
-public interface Writer {
+public interface CliWriter {
     /**
      * write command result in output
      * @param result task result

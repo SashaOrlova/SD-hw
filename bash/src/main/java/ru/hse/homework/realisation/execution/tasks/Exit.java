@@ -2,27 +2,41 @@ package ru.hse.homework.realisation.execution.tasks;
 
 import ru.hse.homework.interfaces.execution.Task;
 
+/**
+ * Выход из программы
+ */
 public class Exit implements Task {
     public static final String COMMAND = "exit";
 
+    /**
+     * Устанавливает аргументы команды, они игнорируются
+     * @param args arguments for command
+     */
     @Override
-    public void setArgs(String[] args) throws Exception {
-        if (args.length != 0)
-            throw new ExitException("Wrong number of args in exit");
+    public void setArgs(String[] args) {
     }
 
+    /**
+     * Выполняет задачу
+     * @param args входной поток
+     * @return результат выполнения
+     * @throws Exception
+     */
     @Override
-    public String execute() throws Exception {
-        System.exit(0);
-        return null;
+    public String execute(String[] args) throws ExitException {
+        throw new ExitException("Program exit");
     }
 
+    /**
+     * Возвращает аргументы команды
+     * @return аргументы команды
+     */
     @Override
     public String[] getArgs() {
-        return null;
+        return new String[0];
     }
 
-    private static class ExitException extends Exception {
+    public static class ExitException extends Exception {
         ExitException(String message) {
             super(message);
         }
