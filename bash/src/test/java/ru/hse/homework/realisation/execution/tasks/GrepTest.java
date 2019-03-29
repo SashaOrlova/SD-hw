@@ -9,40 +9,40 @@ public class GrepTest {
     @Test
     public void simpleTest() throws Exception {
         Task grep = new Grep();
-        grep.setArgs(new String[]{"aaa", "aaa bbb"});
-        String res = grep.execute();
+        grep.setArgs(new String[]{"aaa"});
+        String res = grep.execute(new String[]{"aaa\n bbb"});
         assertEquals("aaa", res);
     }
 
     @Test
     public void manyMatchesTest() throws Exception {
         Task grep = new Grep();
-        grep.setArgs(new String[]{"a+", "a aa aaa bbb aaaa"});
-        String res = grep.execute();
-        assertEquals("a aa aaa aaaa", res);
+        grep.setArgs(new String[]{"a+"});
+        String res = grep.execute(new String[]{"a\naa\naaa\nbbb\naaaa"});
+        assertEquals("a\naa\naaa\naaaa", res);
     }
 
     @Test
     public void caseTest() throws Exception {
         Task grep = new Grep();
-        grep.setArgs(new String[]{"i", "hey", "Hey HEY HeY"});
-        String res = grep.execute();
-        assertEquals("Hey HEY HeY", res);
+        grep.setArgs(new String[]{"-i", "hey"});
+        String res = grep.execute(new String[]{"Hey\nHEY\nHeY"});
+        assertEquals("Hey\nHEY\nHeY", res);
     }
 
     @Test
     public void wordsTest() throws Exception {
         Task grep = new Grep();
-        grep.setArgs(new String[]{"w", "hey", "hey world! heyworld"});
-        String res = grep.execute();
-        assertEquals("hey", res);
+        grep.setArgs(new String[]{"-w", "hey"});
+        String res = grep.execute(new String[]{"hey world!\nheyworld"});
+        assertEquals("hey world!", res);
     }
 
     @Test
     public void linesTest() throws Exception {
         Task grep = new Grep();
-        grep.setArgs(new String[]{"A", "2", "summer", "i wont summer\nmore\nmore\nand more"});
-        String res = grep.execute();
-        assertEquals("summer\nmore\nmore\n", res);
+        grep.setArgs(new String[]{"-A", "2", "summer", "i wont summer\nmore\nmore\nand more"});
+        String res = grep.execute(new String[]{"i wont\nsummer\nmore\nmore\nand more"});
+        assertEquals("summer\nmore\nmore", res);
     }
 }

@@ -1,47 +1,85 @@
 package ru.hse.homework.realisation.execution.tasks;
 
+import picocli.CommandLine;
 import ru.hse.homework.interfaces.execution.Task;
+import ru.hse.homework.realisation.CliUtils;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Grep implements Task {
     public static final String COMMAND = "grep";
     private String[] args;
-    public static String REGEX_FIND_WORD = "\\b%s\\b";
+    private static String REGEX_FIND_WORD = "\\b%s\\b";
+
+    @picocli.CommandLine.Option(names = "-i", description = "ignore case")
+    private boolean ignoreCase = false;
+
+    @picocli.CommandLine.Option(names = "-w", description = "only words")
+    private boolean onlyWords = false;
+
+    @picocli.CommandLine.Parameters(arity = "1..2" )
+    private String[] regexps;
+
+    @picocli.CommandLine.Option(names = "-A", description = "after lines")
+    private int afterLines = 0;
 
     @Override
     public void setArgs(String[] args) throws Exception {
-        if (args.length < 2) {
-            throw new Exception();
+        if (args.length < 1) {
+            throw new GrepException("Wrong args number");
         }
         this.args = args;
     }
 
     @Override
-    public String execute() throws Exception {
-        String pattern = args[args.length - 2];
-        String text = args[args.length - 1];
-        if (Arrays.asList(args).contains("i")) {
+    public String execute(String[] args) throws Exception {
+        new CommandLine(this).parseArgs(this.args);
+
+        String pattern;
+        if (regexps == null || regexps.length < 1 || regexps.length > 2) {
+            throw new GrepException("Wrong args number");
+        } else {
+            pattern = regexps[0];
+        }
+
+        String text;
+        if (args != null) {
+            text = String.join(" ", args);
+        } else {
+            if (regexps.length < 2) {
+                throw new GrepException("wrong args number");
+            }
+            text = CliUtils.getFile(regexps[1]);
+        }
+
+        if (ignoreCase) {
             pattern = "(?i)" + pattern;
         }
-        if (Arrays.asList(args).contains("w")) {
-            pattern = String.format(REGEX_FIND_WORD, Pattern.quote(pattern));
+        if (onlyWords) {
+            pattern = String.format(REGEX_FIND_WORD, pattern);
         }
-        if (Arrays.asList(args).contains("A")) {
-            int num = Integer.parseInt(args[Arrays.asList(args).indexOf("A") + 1]);
-            pattern = pattern + "(.*\n){" + Integer.toString(num + 1) + "}";
+
+        pattern = ".*" + pattern + ".*";
+        String[] lines = text.split(System.lineSeparator());
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i].matches(pattern)) {
+                if (afterLines > 0) {
+                    result.append(System.lineSeparator())
+                            .append(String.join(System.lineSeparator(),
+                                    Arrays.copyOfRange(lines, i, Math.min(afterLines + i + 1, lines.length))));
+                } else {
+                    result.append(System.lineSeparator()).append(lines[i]);
+                }
+            }
         }
-        Pattern regexPattern = Pattern.compile(pattern);
-        StringBuilder res = new StringBuilder();
-        Matcher m = regexPattern.matcher(text);
-        while (m.find()) {
-            res.append(' ');
-            res.append(m.group());
+        return result.toString().trim();
+    }
+
+    private static class GrepException extends Exception {
+        GrepException(String message) {
+            super(message);
         }
-        res.deleteCharAt(0);
-        return res.toString();
     }
 
     @Override

@@ -39,6 +39,9 @@ public class WordsParser implements Parser {
             case Exit.COMMAND:
                 task = new Exit();
                 break;
+            case Grep.COMMAND:
+                task = new Grep();
+                break;
             default:
                 if (taskWithArgs.length > 2 && "=".equals(taskWithArgs[1])) {
                     task = new Assignment();
