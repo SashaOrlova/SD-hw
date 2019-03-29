@@ -6,6 +6,9 @@ import ru.hse.homework.realisation.CliUtils;
 
 import java.util.Arrays;
 
+/**
+ * Задача поиска по регулярному выражению
+ */
 public class Grep implements Task {
     public static final String COMMAND = "grep";
     private String[] args;
@@ -23,6 +26,11 @@ public class Grep implements Task {
     @picocli.CommandLine.Option(names = "-A", description = "after lines")
     private int afterLines = 0;
 
+    /**
+     * Устанавливает аргументы команты
+     * @param args arguments for command
+     * @throws Exception если количество агрументов не верно
+     */
     @Override
     public void setArgs(String[] args) throws Exception {
         if (args.length < 1) {
@@ -31,12 +39,18 @@ public class Grep implements Task {
         this.args = args;
     }
 
+    /**
+     * Выполняет команду
+     * @param args входной поток команды
+     * @return результат выполнения
+     * @throws Exception если произошла ошибка
+     */
     @Override
     public String execute(String[] args) throws Exception {
         new CommandLine(this).parseArgs(this.args);
 
         String pattern;
-        if (regexps == null || regexps.length < 1 || regexps.length > 2) {
+        if (regexps == null || regexps.length < 1 || regexps.length > 2 || afterLines < 0) {
             throw new GrepException("Wrong args number");
         } else {
             pattern = regexps[0];
@@ -82,6 +96,10 @@ public class Grep implements Task {
         }
     }
 
+    /**
+     * Получение аргументов команды
+     * @return
+     */
     @Override
     public String[] getArgs() {
         return args;
